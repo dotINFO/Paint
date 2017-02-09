@@ -5,6 +5,8 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
+    "build": "ng build --base-href ./",
+    "electron": "electron dist/paint.js",
     "start": "ng serve",
     "test": "ng test",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
@@ -17,10 +19,16 @@
     "@angular/core": "^2.3.1",
     "@angular/forms": "^2.3.1",
     "@angular/http": "^2.3.1",
+    "@angular/material": "^2.0.0-beta.1",
     "@angular/platform-browser": "^2.3.1",
     "@angular/platform-browser-dynamic": "^2.3.1",
     "@angular/router": "^3.3.1",
+    "@types/lodash": "^4.14.52",
     "core-js": "^2.4.1",
+    "electron": "^1.4.15",
+    "jquery": "^3.1.1",
+    "lodash": "^4.17.4",
+    "node-sass": "^4.5.0",
     "rxjs": "^5.0.1",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.7.2"
@@ -28,6 +36,7 @@
   "devDependencies": {
     "@angular/compiler-cli": "^2.3.1",
     "@types/jasmine": "2.5.38",
+    "@types/jquery": "^2.0.40",
     "@types/node": "^6.0.42",
     "angular-cli": "1.0.0-beta.28.3",
     "codelyzer": "~2.0.0-beta.1",
