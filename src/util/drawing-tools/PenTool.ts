@@ -22,6 +22,7 @@ export class PenTool implements IAbstractDrawingTool {
     draw(context: CanvasRenderingContext2D, point: Point) {
         this.Points.push(point);
 
+
         console.log('drawing at ' + point.toString());
         context.lineTo(point.X, point.Y);
         context.stroke();

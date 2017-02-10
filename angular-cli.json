@@ -19,7 +19,7 @@
       "tsconfig": "tsconfig.json",
       "prefix": "app",
       "styles": [
-        "styles.sass"
+        "app.theme.sass"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js"
