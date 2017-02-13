@@ -16,7 +16,7 @@ export class CursorPositionComponent implements IAbstractTool {
 
     constructor(toolService: ToolService) {
         this.toolService = toolService;
-        this.toolService.registerAsTool(this.toolName, this);
+        // this.toolService.registerAsTool(this.toolName, this);
     }
 
     paperClick(point: Point) {

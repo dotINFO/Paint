@@ -15,11 +15,11 @@ export class ResizableDirective {
             }
         };
 
-        $(() => {
-            let element = $('#paper-wrapper');
-            // element.resizable(resizableConfig);
+        // $(() => {
+        //     let element = $('#paper-wrapper');
+        //     // element.resizable(resizableConfig);
 
-        })
+        // })
         //let element = $(el.nativeElement);
         //let element = $('#paper-wrapper');
         //element.resizable(resizableConfig);

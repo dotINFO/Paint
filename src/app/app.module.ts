@@ -1,4 +1,6 @@
+import 'jquery';
 import 'hammerjs';
+import 'fabric';
 
 import { NgModule } from '@angular/core';
 import { MaterialModule } from '@angular/material';
