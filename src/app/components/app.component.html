@@ -1,6 +1,24 @@
-<md-sidenav-container class="example-sidenav-fab-container">
-    <workspace-component></workspace-component>
-    <md-sidenav #sidenav mode="side" opened="true" align="end">
-        <toolspace-component></toolspace-component>
+<div>
+    <md-sidenav #sidenav1 mode="over" opened="true">
+        <md-toolbar color="white">
+            <button md-icon-button (click)="sidenav1.close()">
+                <md-icon class="menu">menu</md-icon>
+            </button>
+        </md-toolbar>
+        <menu-component></menu-component>
     </md-sidenav>
-</md-sidenav-container>
+    <md-sidenav-container>
+        <div>
+            <md-toolbar color="primary">
+                <button md-icon-button (click)="sidenav1.open()">
+                <md-icon class="menu">menu</md-icon>
+            </button>
+            </md-toolbar>
+            <workspace-component></workspace-component>
+        </div>
+
+        <md-sidenav #sidenav2 mode="side" opened="true" align="end">
+            <toolspace-component></toolspace-component>
+        </md-sidenav>
+    </md-sidenav-container>
+</div>

@@ -8,8 +8,9 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './components/app.component';
 
+import { MenuComponent } from './components/menu/menu.component';
+
 import { WorkspaceComponent } from './components/workspace/workspace.component';
-import { WorkspaceToolbarComponent } from './components/workspace/toolbar/toolbar.component';
 import { PaperComponent } from './components/workspace/paper/paper.component';
 
 import { ToolspaceComponent } from './components/toolspace/toolspace.component';
@@ -35,8 +36,9 @@ import { ResizableDirective } from './directives/resizable/resizable.diretive';
         /** Components */
         AppComponent,
 
+        MenuComponent,
+
         WorkspaceComponent,
-        WorkspaceToolbarComponent,
         PaperComponent,
 
         ToolspaceComponent,
