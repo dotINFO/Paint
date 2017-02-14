@@ -4,7 +4,6 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "postinstall": "cpx webpack-build-common.js node_modules/angular-cli/models && cpx webpack-build-test.js node_modules/angular-cli/models",
     "build": "ng build --base-href ./",
     "start": "electron dist/entry.js",
     "live": "concurrently \"ng serve\" \"electron src/entry.live.js\"",

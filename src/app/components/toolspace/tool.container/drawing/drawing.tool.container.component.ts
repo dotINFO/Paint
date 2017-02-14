@@ -39,6 +39,10 @@ export class DrawingToolContainerComponent {
         this.toolService.setSize(event.value);
     }
 
+    setSelectMode() {
+        this.toolService.setSelectMode();
+    }
+
     setColor(color: string) {
         this.toolService.setColor(color);
     }

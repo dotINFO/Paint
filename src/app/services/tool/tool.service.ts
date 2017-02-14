@@ -1,4 +1,4 @@
-declare var fabric;
+declare var fabric, nrequire;
 
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
@@ -56,12 +56,32 @@ export class ToolService {
         (<any>this.canvas).freeDrawingBrush.color = color;
     }
 
+    setSelectMode() {
+        this.canvas.isDrawingMode = false;
+    }
+
     public setCanvas(canvas: HTMLCanvasElement) {
         let c = new fabric.Canvas(canvas);
         c.isDrawingMode = true;
         c.freeDrawingBrush = new fabric.PencilBrush(c);
 
         this.canvas = c;
+    }
+
+    openImage(imageData) {
+        debugger;
+        var blob = new Blob([imageData], { type: "image/png" });
+        var urlCreator = window.URL;
+        var imageUrl = urlCreator.createObjectURL(blob);
+        var img = new Image();
+        img.onload = () => {
+            this.canvas.add(new fabric.Image(img));
+        }
+        img.src = imageUrl;
+    }
+
+    getImage() {
+        return this.canvas.toDataURL();
     }
 
     /**
