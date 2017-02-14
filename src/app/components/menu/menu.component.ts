@@ -1,4 +1,7 @@
+declare var electron: any;
 import { Component } from '@angular/core';
+
+// const { Remote } = electron;
 
 @Component({
     selector: 'menu-component',
@@ -8,7 +11,17 @@ import { Component } from '@angular/core';
 export class MenuComponent {
 
 
+    private open() {
+        electron.remote.dialog.showOpenDialog({
+            title: 'Open',
+            filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] },]
+        });
+    }
+
     private save() {
-        let dialog = require('electron');
+        electron.remote.dialog.showSaveDialog({
+            title: 'Save as..',
+            filters: [{ name: 'Images', extensions: ['jpg', 'png'] },]
+        });
     }
 }
