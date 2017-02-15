@@ -1,5 +1,3 @@
-declare var fabric;
-
 /** angular stuff */
 import { Component, ViewChild, HostListener } from '@angular/core';
 
