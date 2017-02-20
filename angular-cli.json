@@ -22,9 +22,7 @@
       "styles": [
         "app.theme.sass"
       ],
-      "scripts": [
-        "../node_modules/jquery/dist/jquery.min.js"
-      ],
+      "scripts": [],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",

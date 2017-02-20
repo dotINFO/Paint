@@ -1,21 +1,15 @@
 <div>
     <md-button-toggle-group #group="mdButtonToggleGroup">
-        <md-button-toggle (change)="setDrawingPen()" value="Pencil">
+        <md-button-toggle *ngFor="let drawingTool of drawingTools" (change)="setDrawingTool(drawingTool)" value="drawingTool">
             <md-icon>brush</md-icon>
         </md-button-toggle>
-        <md-button-toggle (change)="setDrawingSpray()" value="Spray">
-            <md-icon>brush</md-icon>
-        </md-button-toggle>
-        <md-button-toggle (change)="setDrawingCircle()" value="Circle">
-            <md-icon>brush</md-icon>
-        </md-button-toggle>
-        <md-button-toggle (change)="setSelectMode()" value="Select">
+        <md-button-toggle (change)="setFill()" value="Fill">
             <md-icon>brush</md-icon>
         </md-button-toggle>
     </md-button-toggle-group>
     <md-slider (change)="setSize($event)" min="1" max="10" step="1" value="2"></md-slider>
 
-    <md-grid-list cols="6" rowHeight="40px">
+    <md-grid-list cols="6" rowHeight="40px" gutterSize="0px">
         <md-grid-tile *ngFor="let color of colors" [colspan]="1" [rowspan]="1" [style.background]="color" (click)="setColor(color)"></md-grid-tile>
     </md-grid-list>
 </div>

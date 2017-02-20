@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { readFile, writeFile } from 'fs';
 import { remote } from 'electron';
 
+import { extname } from 'path';
 import { ToolService } from '../../services/tool/tool.service';
 
 @Component({
@@ -16,13 +17,17 @@ export class MenuComponent {
         this.toolService = toolService;
     }
 
+    private new() {
+        this.toolService.newDrawing();
+    }
+
     private async open() {
         let path: string[] = await remote.dialog.showOpenDialog({
             title: 'Open',
             filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }]
         });
 
-        if (path.length === 1) {
+        if (path && path.length === 1) {
             readFile(path[0], (err, data) => {
                 if (err) throw err;
 
@@ -35,15 +40,17 @@ export class MenuComponent {
     private async save() {
         let path: string = await remote.dialog.showSaveDialog({
             title: 'Save as..',
-            filters: [{ name: 'Images', extensions: ['jpg', 'png'] }]
+            filters: [{ name: 'Images', extensions: ['png', 'jpg'] }]
         });
 
         if (path) {
-            let img = this.toolService.getImage();
-            var data = img.replace(/^data:image\/\w+;base64,/, "");
+            let format = extname(path);
+            let imgData = this.toolService.getImage(format);
+            imgData = imgData.replace(/^data:image\/\w+;base64,/, "");
 
-            writeFile(path, data, 'base64', (err) => {
-                console.log(err);
+            writeFile(path, imgData, 'base64', (err) => {
+                if (err)
+                    console.log(err);
             });
         }
     }

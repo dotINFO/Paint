@@ -1,4 +1,14 @@
 <div>
-    <toolspace-toolbar-component></toolspace-toolbar-component>
+    <md-toolbar color="primary">
+        <button md-icon-button>
+            <md-icon class="menu">content_paste</md-icon>
+        </button>
+        <button (click)="this.toolService.undo()" md-icon-button>
+            <md-icon>undo</md-icon>
+        </button>
+        <button md-icon-button>
+            <md-icon>redo</md-icon>
+        </button>
+    </md-toolbar>
     <tool-container-component></tool-container-component>
 </div>
