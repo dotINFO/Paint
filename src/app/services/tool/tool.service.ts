@@ -1,5 +1,3 @@
-declare var fabric;
-
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 
@@ -7,11 +5,11 @@ import * as _ from 'lodash';
 import { Canvas, Point, IDrawingTool, EDrawingTool, ETool, Color } from '../../../util/Drawing/drawing';
 
 
-var drawingTools: { [id: string]: any } = {
-    "PencilBrush": fabric.PencilBrush,
-    "SprayBrush": fabric.SprayBrush,
-    "CircleBrush": fabric.CircleBrush
-}
+// var drawingTools: { [id: string]: any } = {
+//     "PencilBrush": fabric.PencilBrush,
+//     "SprayBrush": fabric.SprayBrush,
+//     "CircleBrush": fabric.CircleBrush
+// }
 
 var tools = {};
 
@@ -21,15 +19,24 @@ export class ToolService {
     private drawingTools: { [id: string]: fabric.BaseBrush } = {}
     private fill = false;
 
+
+    public get canUndo() {
+        return this.canvas.canUndo;
+    }
+
+    public get canRedo() {
+        return this.canvas.canRedo;
+    }
+
     public setCanvas(canvas: HTMLCanvasElement) {
         this.canvas = new Canvas(canvas);
         this.canvas.enterDrawingMode(EDrawingTool.Pencil);
     }
 
     private initTools() {
-        _.each(drawingTools, (drawingToolClass, drawingToolname) => {
-            this.drawingTools[drawingToolname] = new drawingToolClass(this.canvas);
-        });
+        // _.each(drawingTools, (drawingToolClass, drawingToolname) => {
+        //     this.drawingTools[drawingToolname] = new drawingToolClass(this.canvas);
+        // });
     }
 
 
@@ -51,6 +58,10 @@ export class ToolService {
 
     public undo() {
         this.canvas.undo();
+    }
+
+    public redo() {
+        this.canvas.redo();
     }
 
     /**

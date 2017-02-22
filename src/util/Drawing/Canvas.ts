@@ -75,6 +75,20 @@ export class Canvas {
         this._drawingToolColor = color;
     }
 
+    /** 
+     * Check if there is saved work to undo
+    */
+    public get canUndo() {
+        return this._undoList.length > 0;
+    }
+
+    /** 
+     * Check if there is saved work to redo
+    */
+    public get canRedo() {
+        return this._redoList.length
+    }
+
     /**
      * Creates an instance of Canvas.
      * 
@@ -188,6 +202,14 @@ export class Canvas {
     }
 
     public undo() {
+        let actualImage = this.getContext().getImageData(0, 0, this.width, this.height);
+        this._redoList.push(actualImage);
         this.getContext().putImageData(this._undoList.pop(), 0, 0);
+    }
+
+    public redo() {
+        let actualImage = this.getContext().getImageData(0, 0, this.width, this.height);
+        this._undoList.push(actualImage);
+        this.getContext().putImageData(this._redoList.pop(), 0, 0);
     }
 }
