@@ -3,7 +3,7 @@ import { Point } from '../Point';
 
 export abstract class ITool {
     protected canvas: Canvas;
-    protected context: CanvasRenderingContext2D;
+    protected context: { base: CanvasRenderingContext2D, volatile: CanvasRenderingContext2D }
     constructor(canvas: Canvas) {
         this.canvas = canvas;
         this.context = this.canvas.getContext();

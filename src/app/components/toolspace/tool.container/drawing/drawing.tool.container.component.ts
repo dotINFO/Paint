@@ -15,9 +15,9 @@ export class DrawingToolContainerComponent {
     ];
 
     private drawingTools = [
-        'Pencil',
-        'SprayBrush',
-        'CircleBrush'
+        'Pencil'
+        // 'SprayBrush',
+        // 'CircleBrush'
     ];
 
     constructor(toolService: ToolService) {

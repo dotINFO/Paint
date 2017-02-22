@@ -14,6 +14,7 @@ import { Point } from '../../../../util/Drawing/drawing';
 })
 export class PaperComponent {
     @ViewChild('paper') paper;
+    @ViewChild('papervolatile') paperVolatile;
 
     private toolService: ToolService;
     private context: CanvasRenderingContext2D;
@@ -26,7 +27,7 @@ export class PaperComponent {
     public ngAfterViewInit() {
         let canvas = this.paper.nativeElement;
         this.context = canvas.getContext('2d');
-        this.toolService.setCanvas(canvas);
+        this.toolService.setCanvas(this.paper.nativeElement, this.paperVolatile.nativeElement);
     }
 
     private getPosition(event: MouseEvent): Point {

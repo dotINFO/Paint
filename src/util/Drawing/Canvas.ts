@@ -1,8 +1,9 @@
 import * as $ from 'jquery';
-import { Point, EDrawingTool, IDrawingTool, ITool, ToolContainer, ETool, Color } from './drawing';
+import { Point, EDrawingTool, IDrawingTool, ITool, ToolContainer, ETool, Color, CircularQueue, conf } from './drawing';
 
 export class Canvas {
     private htmlCanvas: HTMLCanvasElement;
+    private volatileCanvas: HTMLCanvasElement;
     private options;
     /** flag: true -> there is a drawing going on right now */
     private isDrawing = false;
@@ -14,8 +15,9 @@ export class Canvas {
     private drawingTool: IDrawingTool;
     private toolContainer: ToolContainer;
 
-    private _undoList: ImageData[] = [];
-    private _redoList: ImageData[] = [];
+
+    private _undoList = new CircularQueue<ImageData>(conf["undo-list.size"]);
+    private _redoList = new CircularQueue<ImageData>(conf["redo-list.size"]);
 
     /** width if the HTML Canvas */
     private _width: number;
@@ -79,14 +81,14 @@ export class Canvas {
      * Check if there is saved work to undo
     */
     public get canUndo() {
-        return this._undoList.length > 0;
+        return this._undoList.size > 0;
     }
 
     /** 
      * Check if there is saved work to redo
     */
     public get canRedo() {
-        return this._redoList.length
+        return this._redoList.size
     }
 
     /**
@@ -95,10 +97,11 @@ export class Canvas {
      * @param {HTMLCanvasElement} el
      * @param {{ [optId: string]: any }} [options]
      */
-    constructor(el: HTMLCanvasElement, options?: { [optId: string]: any }) {
-        this.htmlCanvas = el;
+    constructor(htmlCanvas: HTMLCanvasElement, volatileCanvas: HTMLCanvasElement, options?: { [optId: string]: any }) {
+        this.htmlCanvas = htmlCanvas;
+        this.volatileCanvas = volatileCanvas;
         this.options = options || {};
-        this.newDrawing(el.width, el.height);
+        this.newDrawing(htmlCanvas.width, htmlCanvas.height);
         this.initialize();
     }
 
@@ -110,10 +113,10 @@ export class Canvas {
     }
 
     private initializeHandlers() {
-        $(this.htmlCanvas).mousedown(this.onMouseDown.bind(this));
-        $(this.htmlCanvas).mousemove(this.onMouseMove.bind(this));
-        $(this.htmlCanvas).mouseup(this.onMouseUp.bind(this));
-        $(this.htmlCanvas).click(this.onClick.bind(this));
+        $(this.volatileCanvas).mousedown(this.onMouseDown.bind(this));
+        $(this.volatileCanvas).mousemove(this.onMouseMove.bind(this));
+        $(this.volatileCanvas).mouseup(this.onMouseUp.bind(this));
+        $(this.volatileCanvas).click(this.onClick.bind(this));
 
         $(document).mousemove(this.onMouseMove.bind(this));
         $(document).mouseup(this.onMouseUp.bind(this));
@@ -121,21 +124,23 @@ export class Canvas {
 
     private onMouseDown(evt: JQueryMouseEventObject) {
         if (this.isDrawingMode) {
-            this._undoList.push(this.getContext().getImageData(0, 0, this._width, this._height));
             this.isDrawing = true;
-            this.drawingTool.startDrawing(new Point(evt.offsetX, evt.offsetY));
+            this.drawingTool.startDrawing(this.getCanvasPosition(evt.pageX, evt.pageY));
         }
     }
     private onMouseMove(evt: JQueryMouseEventObject) {
         if (this.isDrawingMode && this.isDrawing) {
-            this.drawingTool.draw(new Point(evt.offsetX, evt.offsetY));
+            this.drawingTool.draw(this.getCanvasPosition(evt.pageX, evt.pageY));
         }
 
     }
 
     private onMouseUp(evt: JQueryMouseEventObject) {
         if (this.isDrawingMode && this.isDrawing) {
-            this.drawingTool.stopDrawing(new Point(evt.offsetX, evt.offsetY));
+            this.drawingTool.stopDrawing(this.getCanvasPosition(evt.pageX, evt.pageY));
+            this.addUndo();
+            this.drawingTool.finalize();
+            this.clearVolatile();
             this.isDrawing = false;
         }
     }
@@ -143,6 +148,22 @@ export class Canvas {
     private onClick(evt: JQueryMouseEventObject) {
         if (!this.isDrawingMode && this.tool)
             this.tool.apply(new Point(evt.offsetX, evt.offsetY));
+    }
+
+    /**
+     * Convert absolute position on page into relative position on canvas
+     */
+    private getCanvasPosition(absoluteX, absoluteY) {
+        return new Point(absoluteX - this.htmlCanvas.offsetLeft, absoluteY - this.htmlCanvas.offsetTop);
+    }
+
+    private clearVolatile() {
+        this.getContext().volatile.clearRect(0, 0, this.width, this.height);
+    }
+
+    private addUndo() {
+        this._undoList.push(this.getContext().base.getImageData(0, 0, this._width, this._height));
+
     }
 
     /**
@@ -176,14 +197,17 @@ export class Canvas {
      * 
      * @returns {CanvasRenderingContext2D}
      */
-    public getContext(): CanvasRenderingContext2D {
-        return this.htmlCanvas.getContext('2d');
+    public getContext(): { base: CanvasRenderingContext2D, volatile: CanvasRenderingContext2D } {
+        return {
+            base: this.htmlCanvas.getContext('2d'),
+            volatile: this.volatileCanvas.getContext('2d')
+        };
     }
 
     public newDrawing(width: number, height: number) {
-        let context = this.getContext();
-        this.htmlCanvas.width = width;
-        this.htmlCanvas.height = height;
+        let context = this.getContext().base;
+        this.htmlCanvas.width = this.volatileCanvas.width = width;
+        this.htmlCanvas.height = this.volatileCanvas.height = height;
         context.fillStyle = "white";
         context.fillRect(0, 0, this.htmlCanvas.width, this.htmlCanvas.height);
     }
@@ -191,7 +215,7 @@ export class Canvas {
     public fromImage(img: HTMLImageElement) {
         let newWidth = img.width,
             newHeight = img.height,
-            context = this.getContext();
+            context = this.getContext().base;
 
         this.newDrawing(newWidth, newHeight);
         context.drawImage(img, 0, 0, newWidth, newHeight);
@@ -202,14 +226,14 @@ export class Canvas {
     }
 
     public undo() {
-        let actualImage = this.getContext().getImageData(0, 0, this.width, this.height);
+        let actualImage = this.getContext().base.getImageData(0, 0, this.width, this.height);
         this._redoList.push(actualImage);
-        this.getContext().putImageData(this._undoList.pop(), 0, 0);
+        this.getContext().base.putImageData(this._undoList.pop(), 0, 0);
     }
 
     public redo() {
-        let actualImage = this.getContext().getImageData(0, 0, this.width, this.height);
+        let actualImage = this.getContext().base.getImageData(0, 0, this.width, this.height);
         this._undoList.push(actualImage);
-        this.getContext().putImageData(this._redoList.pop(), 0, 0);
+        this.getContext().base.putImageData(this._redoList.pop(), 0, 0);
     }
 }

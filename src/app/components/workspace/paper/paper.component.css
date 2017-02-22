@@ -5,9 +5,19 @@
     height: 400px;
 }
 
-#paper {
-    background: white;
+.paper {
+    position: absolute;
     image-rendering: pixelated;
+}
+
+#paper {
+    z-index: 1;
+    background: white;
+}
+
+#paper-volatile {
+    z-index: 2;
+    opacity: 1;
 }
 
 #segrip, #egrip, #sgrip {

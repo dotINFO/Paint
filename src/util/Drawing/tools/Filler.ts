@@ -39,7 +39,7 @@ export class Filler extends ITool {
             canvasHeight = this.canvas.height,
             i = (point.Y * canvasWidth + point.X) * 4;;
 
-        this.imageData = this.context.getImageData(0, 0, canvasWidth, canvasHeight);
+        this.imageData = this.context.base.getImageData(0, 0, canvasWidth, canvasHeight);
         this.startColor.R = this.imageData.data[i];
         this.startColor.G = this.imageData.data[i + 1];
         this.startColor.B = this.imageData.data[i + 2];
@@ -114,7 +114,7 @@ export class Filler extends ITool {
             }
         }
 
-        this.context.putImageData(this.imageData, 0, 0);
+        this.context.base.putImageData(this.imageData, 0, 0);
         this.imageData = null;
     }
 

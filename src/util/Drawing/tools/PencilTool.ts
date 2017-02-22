@@ -7,45 +7,57 @@ export class PencilTool extends IDrawingTool {
         super(canvas);
     }
 
-    startDrawing(point: Point) {
+    public startDrawing(point: Point) {
         this.reset();
         this.addPoint(point);
-        this.context.lineWidth = this.canvas.drawingToolSize;
-        this.context.strokeStyle = this.canvas.drawingToolColor.HexString;
-        this.context.lineCap = 'round';
-        this.context.lineJoin = 'round';
-        this.context.beginPath();
+        this.context.volatile.lineWidth = this.canvas.drawingToolSize;
+        this.context.volatile.strokeStyle = this.canvas.drawingToolColor.HexString;
+        this.context.volatile.lineCap = 'round';
+        this.context.volatile.lineJoin = 'round';
+        this.context.volatile.beginPath();
     }
 
-    draw(point: Point) {
+    public draw(point: Point) {
         this.addPoint(point);
+
         let p1 = this.points[0],
-            p2 = this.points[1];
+            p2 = this.points[1],
+            length = this.points.length;
 
         if (this.points.length == 2 && p1.equals(p2)) {
             p1.moveBy(-0.5, 0.5);
-            this.context.moveTo(p1.X, p1.Y);
-            this.context.lineTo(point.X, point.Y);
         }
 
-        this.drawLastLine();
-        this.context.stroke();
+        this.drawLine(this.points[length - 2], this.points[length - 1], this.context.volatile);
+        this.context.volatile.stroke();
     }
 
-    stopDrawing(point: Point) {
+    public stopDrawing(point: Point) {
         this.addPoint(point);
-        this.drawLastLine();
-        this.context.stroke();
+        let length = this.points.length;
+        this.drawLine(this.points[length - 2], this.points[length - 1], this.context.volatile);
+        this.context.volatile.stroke();
     }
 
-    private drawLastLine() {
-        let len = this.points.length,
-            p1 = this.points[len - 2],
-            midPoint = p1.midPointFrom(this.points[len - 1]),
-            p2 = this.points[len - 1];
+    public finalize() {
+        this.context.base.lineWidth = this.canvas.drawingToolSize;
+        this.context.base.strokeStyle = this.canvas.drawingToolColor.HexString;
+        this.context.base.lineCap = 'round';
+        this.context.base.lineJoin = 'round';
+        this.context.base.beginPath();
 
-        this.context.quadraticCurveTo(p1.X, p1.Y, midPoint.X, midPoint.Y);
-        this.context.quadraticCurveTo(midPoint.X, midPoint.Y, p2.X, p2.Y);
+        for (var i = 0; i < this.points.length - 2; ++i) {
+            this.drawLine(this.points[i], this.points[i + 1], this.context.base)
+            this.context.base.stroke();
+        }
+    }
+
+    private drawLine(p1: Point, p2: Point, context: CanvasRenderingContext2D) {
+        let len = this.points.length,
+            midPoint = p1.midPointFrom(p2);
+
+        context.quadraticCurveTo(p1.X, p1.Y, midPoint.X, midPoint.Y);
+        context.quadraticCurveTo(midPoint.X, midPoint.Y, p2.X, p2.Y);
     }
 
     private reset() {

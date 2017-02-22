@@ -12,3 +12,6 @@ export { Filler } from './tools/Filler';
 
 export { Point } from './Point';
 export { Color } from './Color';
+
+export { CircularQueue } from './CircularQueue';
+export var conf = require('./conf.json');

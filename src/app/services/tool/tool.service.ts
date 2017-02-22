@@ -28,8 +28,8 @@ export class ToolService {
         return this.canvas.canRedo;
     }
 
-    public setCanvas(canvas: HTMLCanvasElement) {
-        this.canvas = new Canvas(canvas);
+    public setCanvas(canvas: HTMLCanvasElement, volatileCanvas: HTMLCanvasElement) {
+        this.canvas = new Canvas(canvas, volatileCanvas);
         this.canvas.enterDrawingMode(EDrawingTool.Pencil);
     }
 
