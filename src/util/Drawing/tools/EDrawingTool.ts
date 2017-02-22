@@ -1,3 +1,6 @@
 export enum EDrawingTool {
-    Pencil
+    Pencil,
+
+    /* 2D Shapes */
+    Rectangle
 };

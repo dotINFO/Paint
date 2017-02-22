@@ -1,4 +1,4 @@
-import 'jquery';
+//import 'jquery';
 import 'hammerjs';
 
 import { NgModule } from '@angular/core';
@@ -15,6 +15,7 @@ import { PaperComponent } from './components/workspace/paper/paper.component';
 import { ToolspaceComponent } from './components/toolspace/toolspace.component';
 import { ToolContainerComponent } from './components/toolspace/tool.container/tool.container.component';
 import { DrawingToolContainerComponent } from './components/toolspace/tool.container/drawing/drawing.tool.container.component';
+import { TDShapesToolContainerComponent } from './components/toolspace/tool.container/tdshapes/tdshapes.tool.container.component';
 import { TextToolContainerComponent } from './components/toolspace/tool.container/text/text.tool.container.component';
 
 import { ToolService } from './services/tool/tool.service';
@@ -38,6 +39,8 @@ import { ResizableDirective } from './directives/resizable/resizable.diretive';
         ToolspaceComponent,
         ToolContainerComponent,
         DrawingToolContainerComponent,
+        TDShapesToolContainerComponent,
+
         TextToolContainerComponent,
 
         /** Directivs */

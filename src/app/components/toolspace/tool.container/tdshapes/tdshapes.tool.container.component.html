@@ -1,0 +1,7 @@
+<div>
+    <md-button-toggle-group #group="mdButtonToggleGroup">
+        <md-button-toggle *ngFor="let shape of shapes" (change)="toolService.setDrawingTool(shape)" (value)="shape">
+            <md-icon>brush</md-icon>
+        </md-button-toggle>
+    </md-button-toggle-group>
+</div>

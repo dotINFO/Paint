@@ -1,4 +1,4 @@
-import { Canvas, EDrawingTool, ETool, IDrawingTool, ITool, PencilTool, Filler } from '../drawing';
+import { Canvas, EDrawingTool, ETool, IDrawingTool, ITool, PencilTool, RectangleTool, Filler } from '../drawing';
 
 export class ToolContainer {
     private canvas: Canvas;
@@ -12,6 +12,10 @@ export class ToolContainer {
 
     private initialize() {
         this.drawingTools[EDrawingTool.Pencil] = new PencilTool(this.canvas);
+
+
+        this.drawingTools[EDrawingTool.Rectangle] = new RectangleTool(this.canvas);
+
         this.tools[ETool.Filler] = new Filler(this.canvas);
     }
 

@@ -8,6 +8,9 @@ export { IDrawingTool } from './tools/IDrawingTool';
 export { ITool } from './tools/ITool';
 
 export { PencilTool } from './tools/PencilTool';
+
+export { RectangleTool } from './tools/RectangleTool';
+
 export { Filler } from './tools/Filler';
 
 export { Point } from './Point';
