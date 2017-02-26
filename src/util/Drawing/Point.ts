@@ -25,8 +25,8 @@ export class Point {
      * @param {number} y Y component
      */
     constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
+        this.x = Math.round(x);
+        this.y = Math.round(y);
     }
 
     /**
@@ -58,8 +58,21 @@ export class Point {
      * @param {Point} point
      * @returns {Point} the mid point
      */
-    public midPointFrom(point: Point): Point {
+    public midPointTo(point: Point): Point {
         return this.lerp(point);
+    }
+
+    /**
+     * Gets Euclidean distance between two points
+     * 
+     * @param {Point} point 
+     * @returns 
+     */
+    public distanceTo(point: Point) {
+        let dx = this.x - point.X,
+            dy = this.y - point.Y;
+
+        return Math.sqrt((dx * dx) + (dy * dy));
     }
 
     private lerp(point: Point, t?: number): Point {

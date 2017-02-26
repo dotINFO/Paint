@@ -52,7 +52,7 @@ export class PencilTool extends IDrawingTool {
 
     private drawLine(p1: Point, p2: Point, context: CanvasRenderingContext2D) {
         let len = this.points.length,
-            midPoint = p1.midPointFrom(p2);
+            midPoint = p1.midPointTo(p2);
 
         context.quadraticCurveTo(p1.X, p1.Y, midPoint.X, midPoint.Y);
         context.quadraticCurveTo(midPoint.X, midPoint.Y, p2.X, p2.Y);

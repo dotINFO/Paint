@@ -2,6 +2,8 @@ import { Canvas, IDrawingTool, Point } from '../drawing';
 
 export class NeighborPencilTool extends IDrawingTool {
     private points: Point[] = [];
+    private _minDistance = 50;
+    private _conjunctionFactor = 0.02;
 
     constructor(canvas: Canvas) {
         super(canvas);
@@ -29,7 +31,7 @@ export class NeighborPencilTool extends IDrawingTool {
     }
 
     private drawLine(context: CanvasRenderingContext2D, pointIndex: number) {
-        context.lineWidth = 1;
+        context.lineWidth = this.canvas.drawingToolSize;
         context.lineJoin = context.lineCap = 'round';
         context.strokeStyle = this.canvas.drawingToolColor.RGBAString;
         context.beginPath();
@@ -38,19 +40,19 @@ export class NeighborPencilTool extends IDrawingTool {
         context.stroke();
 
         for (var i = 0; i < pointIndex; i++) {
-            let dx = this.points[i].X - this.points[pointIndex].X,
-                dy = this.points[i].Y - this.points[pointIndex].Y,
-                d = dx * dx + dy * dy;
+            let distance = this.points[i].distanceTo(this.points[pointIndex]);
 
-            if (d < 1000) {
+            if (distance < this._minDistance) {
                 context.beginPath();
-
                 context.strokeStyle = this.canvas.drawingToolColor.getRGBAString(0.06);
-                context.moveTo(this.points[pointIndex].X + (dx * 0.2), this.points[pointIndex].Y + (dy * 0.2));
-                context.lineTo(this.points[i].X - (dx * 0.2), this.points[i].Y - (dy * 0.2));
+
+                let pt1 = Point.fromPoint(this.points[pointIndex]).moveBy(distance * this._conjunctionFactor, distance * this._conjunctionFactor),
+                    pt2 = Point.fromPoint(this.points[i]).moveBy(-distance * this._conjunctionFactor, -distance * this._conjunctionFactor);
+
+                context.moveTo(pt1.X, pt1.Y);
+                context.lineTo(pt2.X, pt2.Y);
                 context.stroke();
             }
-
         }
     }
 

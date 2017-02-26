@@ -17,7 +17,7 @@ export class EllipseTool extends IDrawingTool {
     public draw(point: Point) {
         let startX = this._startingPoint.X,
             startY = this._startingPoint.Y,
-            midPoint = this._startingPoint.midPointFrom(point);
+            midPoint = this._startingPoint.midPointTo(point);
 
         this.context.volatile.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.volatile.beginPath();
@@ -28,7 +28,7 @@ export class EllipseTool extends IDrawingTool {
     public stopDrawing(point: Point) {
         let startX = this._startingPoint.X,
             startY = this._startingPoint.Y,
-            midPoint = this._startingPoint.midPointFrom(point);
+            midPoint = this._startingPoint.midPointTo(point);
         this._endingPoint = point;
 
         this.context.volatile.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -40,7 +40,7 @@ export class EllipseTool extends IDrawingTool {
     public finalize() {
         let startX = this._startingPoint.X,
             startY = this._startingPoint.Y,
-            midPoint = this._startingPoint.midPointFrom(this._endingPoint);
+            midPoint = this._startingPoint.midPointTo(this._endingPoint);
 
         this.context.base.lineWidth = this.canvas.drawingToolSize;
         this.context.base.strokeStyle = this.canvas.drawingToolColor.HexString;
