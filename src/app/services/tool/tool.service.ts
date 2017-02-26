@@ -48,6 +48,10 @@ export class ToolService {
         this.canvas.drawingToolColor = color;
     }
 
+    setOpacity(opacity: number) {
+        this.canvas.drawingToolColor.alpha = opacity;
+    }
+
     setDrawingTool(drawingTool: EDrawingTool | string) {
         this.canvas.enterDrawingMode(drawingTool);
     }

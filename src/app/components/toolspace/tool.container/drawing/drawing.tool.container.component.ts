@@ -15,7 +15,9 @@ export class DrawingToolContainerComponent {
     ];
 
     private drawingTools = [
-        'Pencil'
+        'Pencil',
+        'NeighbordPencil',
+
         // 'SprayBrush',
         // 'CircleBrush'
     ];
@@ -43,5 +45,9 @@ export class DrawingToolContainerComponent {
 
     private setColor(color: string) {
         this.toolService.setColor(Color.fromHEX(color));
+    }
+
+    private setOpacity(event) {
+        this.toolService.setOpacity(event.value);
     }
 }

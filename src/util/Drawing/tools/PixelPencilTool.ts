@@ -1,6 +1,6 @@
 import { Canvas, IDrawingTool, Point } from '../drawing';
 
-export class PencilTool extends IDrawingTool {
+export class PixelPencilTool extends IDrawingTool {
     private points: Point[] = [];
 
     constructor(canvas: Canvas) {
@@ -10,6 +10,11 @@ export class PencilTool extends IDrawingTool {
     public startDrawing(point: Point) {
         this.reset();
         this.addPoint(point);
+        this.context.volatile.lineWidth = this.canvas.drawingToolSize;
+        this.context.volatile.strokeStyle = this.canvas.drawingToolColor.HexString;
+        this.context.volatile.lineCap = 'round';
+        this.context.volatile.lineJoin = 'round';
+        this.context.volatile.beginPath();
     }
 
     public draw(point: Point) {
@@ -23,30 +28,27 @@ export class PencilTool extends IDrawingTool {
             p1.moveBy(-0.5, 0.5);
         }
 
-        this.context.volatile.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawAll(this.context.volatile);
+        this.drawLine(this.points[length - 2], this.points[length - 1], this.context.volatile);
+        this.context.volatile.stroke();
     }
 
     public stopDrawing(point: Point) {
         this.addPoint(point);
-        this.context.volatile.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawAll(this.context.volatile);
+        let length = this.points.length;
+        this.drawLine(this.points[length - 2], this.points[length - 1], this.context.volatile);
+        this.context.volatile.stroke();
     }
 
     public finalize() {
-        this.drawAll(this.context.base);
-    }
-
-    private drawAll(context: CanvasRenderingContext2D) {
-        context.lineWidth = this.canvas.drawingToolSize;
-        context.strokeStyle = this.canvas.drawingToolColor.RGBAString;
-        context.lineCap = 'round';
-        context.lineJoin = 'round';
-        context.beginPath();
+        this.context.base.lineWidth = this.canvas.drawingToolSize;
+        this.context.base.strokeStyle = this.canvas.drawingToolColor.HexString;
+        this.context.base.lineCap = 'round';
+        this.context.base.lineJoin = 'round';
+        this.context.base.beginPath();
 
         for (var i = 0; i < this.points.length - 2; ++i) {
-            this.drawLine(this.points[i], this.points[i + 1], context)
-            context.stroke();
+            this.drawLine(this.points[i], this.points[i + 1], this.context.base)
+            this.context.base.stroke();
         }
     }
 

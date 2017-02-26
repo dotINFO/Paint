@@ -8,8 +8,10 @@ export { IDrawingTool } from './tools/IDrawingTool';
 export { ITool } from './tools/ITool';
 
 export { PencilTool } from './tools/PencilTool';
+export { NeighborPencilTool } from './tools/NeighborPencilTool';
 
 export { RectangleTool } from './tools/RectangleTool';
+export { EllipseTool } from './tools/EllipseTool';
 
 export { Filler } from './tools/Filler';
 

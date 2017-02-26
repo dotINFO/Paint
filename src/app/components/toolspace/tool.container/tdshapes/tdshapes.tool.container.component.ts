@@ -11,7 +11,7 @@ export class TDShapesToolContainerComponent {
 
     private shapes = [
         'Rectangle',
-        'Circle'
+        'Ellipse'
     ];
 
     constructor(toolService: ToolService) {

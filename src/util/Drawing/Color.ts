@@ -8,11 +8,13 @@ export class Color {
     private _R: number;
     private _G: number;
     private _B: number;
+    private _alpha: number;
 
-    constructor(r: number, g: number, b: number) {
+    constructor(r: number, g: number, b: number, alpha?: number) {
         this._R = r;
         this._G = g;
         this._B = b;
+        this._alpha = alpha || 1;
     }
 
     /**
@@ -31,6 +33,10 @@ export class Color {
      */
     get RGBString(): string {
         return `rgb(${this.R}, ${this.G}, ${this.B})`;
+    }
+
+    get RGBAString(): string {
+        return `rgba(${this.R}, ${this.G}, ${this.B}, ${this.alpha})`;
     }
 
     /**
@@ -52,6 +58,27 @@ export class Color {
      */
     get B(): number {
         return this._B;
+    }
+
+    set alpha(alpha: number) {
+        if (0 <= alpha && alpha <= 1)
+            this._alpha = alpha;
+    }
+
+    get alpha() {
+        return this._alpha;
+    }
+
+    public getRGBAString(alpha: number): string {
+        return `rgba(${this.R}, ${this.G}, ${this.B}, ${alpha})`;
+    }
+
+    public equals(color: Color, tolerance?: number) {
+        if (!tolerance) tolerance = 0;
+
+        return Math.abs(this.R - color.R) <= tolerance &&
+            Math.abs(this.G - color.G) <= tolerance &&
+            Math.abs(this.B - color.B) <= tolerance
     }
 
     /* Static colors.
@@ -78,13 +105,5 @@ export class Color {
             b = parseInt(nums[4], 10);
 
         return new Color(r, g, b);
-    }
-
-    public equals(color: Color, tolerance?: number) {
-        if (!tolerance) tolerance = 0;
-
-        return Math.abs(this.R - color.R) <= tolerance &&
-            Math.abs(this.G - color.G) <= tolerance &&
-            Math.abs(this.B - color.B) <= tolerance
     }
 }
