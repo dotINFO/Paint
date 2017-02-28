@@ -23,39 +23,33 @@ export class PencilTool extends IDrawingTool {
             p1.moveBy(-0.5, 0.5);
         }
 
-        this.context.volatile.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawAll(this.context.volatile);
+        this.drawLine(this.points.length - 1, this.context.volatile);
     }
 
     public stopDrawing(point: Point) {
         this.addPoint(point);
-        this.context.volatile.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawAll(this.context.volatile);
+        this.drawLine(this.points.length - 1, this.context.volatile);
     }
 
     public finalize() {
-        this.drawAll(this.context.base);
+        for (let i = 1; i < this.points.length; ++i) {
+            this.drawLine(i, this.context.base);
+        }
     }
 
-    private drawAll(context: CanvasRenderingContext2D) {
+    private drawLine(i: number, context: CanvasRenderingContext2D) {
+        let pt1 = this.points[i - 1],
+            pt2 = this.points[i],
+            midPoint = pt1.midPointTo(pt2);
+
         context.lineWidth = this.canvas.drawingToolSize;
         context.strokeStyle = this.canvas.drawingToolColor.RGBAString;
         context.lineCap = 'round';
         context.lineJoin = 'round';
         context.beginPath();
-
-        for (var i = 0; i < this.points.length - 2; ++i) {
-            this.drawLine(this.points[i], this.points[i + 1], context)
-            context.stroke();
-        }
-    }
-
-    private drawLine(p1: Point, p2: Point, context: CanvasRenderingContext2D) {
-        let len = this.points.length,
-            midPoint = p1.midPointTo(p2);
-
-        context.quadraticCurveTo(p1.X, p1.Y, midPoint.X, midPoint.Y);
-        context.quadraticCurveTo(midPoint.X, midPoint.Y, p2.X, p2.Y);
+        context.quadraticCurveTo(pt1.X, pt1.Y, midPoint.X, midPoint.Y);
+        context.quadraticCurveTo(midPoint.X, midPoint.Y, pt2.X, pt2.Y);
+        context.stroke();
     }
 
     private reset() {
