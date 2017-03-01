@@ -44,8 +44,10 @@ export class RectangleTool extends IDrawingTool {
         this.context.base.lineWidth = this.canvas.drawingToolSize;
         this.context.base.strokeStyle = this.canvas.drawingToolColor.HexString;
 
-        this.context.volatile.beginPath();
+        this.context.base.beginPath();
         this.context.base.rect(startX, startY, width, height);
         this.context.base.stroke();
+
+        this._startingPoint = this._endingPoint = null;
     }
 }

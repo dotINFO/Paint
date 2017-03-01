@@ -32,6 +32,7 @@ export class PencilTool extends IDrawingTool {
     }
 
     public finalize() {
+
         for (let i = 1; i < this.points.length; ++i) {
             this.drawLine(i, this.context.base);
         }
@@ -47,6 +48,7 @@ export class PencilTool extends IDrawingTool {
         context.lineCap = 'round';
         context.lineJoin = 'round';
         context.beginPath();
+        context.moveTo(pt1.X, pt1.Y);
         context.quadraticCurveTo(pt1.X, pt1.Y, midPoint.X, midPoint.Y);
         context.quadraticCurveTo(midPoint.X, midPoint.Y, pt2.X, pt2.Y);
         context.stroke();
