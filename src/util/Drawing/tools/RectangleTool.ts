@@ -29,10 +29,10 @@ export class RectangleTool extends IDrawingTool {
     }
 
     private drawRectangle(context: CanvasRenderingContext2D, endingPoint: Point) {
-        let startX = this._startingPoint.X,
-            startY = this._startingPoint.Y,
-            width = endingPoint.X - startX,
-            height = endingPoint.Y - startY;
+        let startX = this._startingPoint.X + 0.5,
+            startY = this._startingPoint.Y + 0.5,
+            width = endingPoint.X - startX + 0.5,
+            height = endingPoint.Y - startY + 0.5;
 
         context.lineWidth = this.canvas.drawingToolSize;
         context.strokeStyle = this.canvas.drawingToolColor.HexString;

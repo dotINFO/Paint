@@ -25,8 +25,8 @@ export class Point {
      * @param {number} y Y component
      */
     constructor(x: number, y: number) {
-        this.x = Math.round(x) + 0.5;
-        this.y = Math.round(y) + 0.5;
+        this.x = Math.round(x);
+        this.y = Math.round(y);
     }
 
     /**

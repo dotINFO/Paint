@@ -37,7 +37,7 @@ export class Filler extends ITool {
             y,
             canvasWidth = this.canvas.width,
             canvasHeight = this.canvas.height,
-            i = (point.Y * canvasWidth + point.X) * 4;;
+            i = (point.Y * canvasWidth + point.X) * 4;
 
         this.imageData = this.context.base.getImageData(0, 0, canvasWidth, canvasHeight);
         this.startColor.R = this.imageData.data[i];

@@ -29,11 +29,11 @@ export class EllipseTool extends IDrawingTool {
     }
 
     private drawEllipse(context: CanvasRenderingContext2D, endingPoint: Point) {
-        let startX = this._startingPoint.X,
-            startY = this._startingPoint.Y,
+        let startX = this._startingPoint.X + 0.5,
+            startY = this._startingPoint.Y + 0.5,
             midPoint = this._startingPoint.midPointTo(endingPoint),
-            width = Math.abs(midPoint.X - startX),
-            height = Math.abs(midPoint.Y - startY);
+            width = Math.abs(midPoint.X + 0.5 - startX),
+            height = Math.abs(midPoint.Y + 0.5 - startY);
 
         context.lineWidth = this.canvas.drawingToolSize;
         context.strokeStyle = this.canvas.drawingToolColor.HexString;
