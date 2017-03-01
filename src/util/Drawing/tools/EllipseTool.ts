@@ -10,42 +10,36 @@ export class EllipseTool extends IDrawingTool {
 
     public startDrawing(point: Point) {
         this._startingPoint = point;
-        this.context.volatile.lineWidth = this.canvas.drawingToolSize;
-        this.context.volatile.strokeStyle = this.canvas.drawingToolColor.HexString;
     }
 
     public draw(point: Point) {
-        let startX = this._startingPoint.X,
-            startY = this._startingPoint.Y,
-            midPoint = this._startingPoint.midPointTo(point);
-
         this.context.volatile.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.volatile.beginPath();
-        this.context.volatile.ellipse(midPoint.X, midPoint.Y, Math.abs(midPoint.X - startX), Math.abs(midPoint.Y - startY), 0, 2 * Math.PI, 0);
-        this.context.volatile.stroke();
+        this.drawEllipse(this.context.volatile, point);
     }
 
     public stopDrawing(point: Point) {
-        let startX = this._startingPoint.X,
-            startY = this._startingPoint.Y,
-            midPoint = this._startingPoint.midPointTo(point);
         this._endingPoint = point;
-
         this.context.volatile.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.volatile.beginPath();
-        this.context.volatile.ellipse(midPoint.X, midPoint.Y, Math.abs(midPoint.X - startX), Math.abs(midPoint.Y - startY), 0, 2 * Math.PI, 0);
-        this.context.volatile.stroke();
+        this.drawEllipse(this.context.volatile, point);
     }
 
     public finalize() {
+        this.drawEllipse(this.context.base, this._endingPoint);
+        this._startingPoint = this._endingPoint = null;
+    }
+
+    private drawEllipse(context: CanvasRenderingContext2D, endingPoint: Point) {
         let startX = this._startingPoint.X,
             startY = this._startingPoint.Y,
-            midPoint = this._startingPoint.midPointTo(this._endingPoint);
+            midPoint = this._startingPoint.midPointTo(endingPoint),
+            width = Math.abs(midPoint.X - startX),
+            height = Math.abs(midPoint.Y - startY);
 
-        this.context.base.lineWidth = this.canvas.drawingToolSize;
-        this.context.base.strokeStyle = this.canvas.drawingToolColor.HexString;
-        this.context.base.beginPath();
-        this.context.base.ellipse(midPoint.X, midPoint.Y, Math.abs(midPoint.X - startX), Math.abs(midPoint.Y - startY), 0, 2 * Math.PI, 0);
-        this.context.base.stroke();
+        context.lineWidth = this.canvas.drawingToolSize;
+        context.strokeStyle = this.canvas.drawingToolColor.HexString;
+        context.beginPath();
+        context.ellipse(midPoint.X, midPoint.Y, width, height, 0, 2 * Math.PI, 0);
+        context.closePath();
+        context.stroke();
     }
 }

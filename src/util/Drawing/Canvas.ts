@@ -163,6 +163,7 @@ export class Canvas {
 
     private addUndo() {
         this._undoList.push(this.getContext().base.getImageData(0, 0, this._width, this._height));
+        this._redoList.clear();
 
     }
 

@@ -1,5 +1,5 @@
 export class CircularQueue<T> {
-    private _queue;
+    private _queue: T[];
     private _length = 0;
     private _size = 0;
     private _top = -1;
@@ -35,5 +35,9 @@ export class CircularQueue<T> {
 
         if (this._size < this._length)
             this._size++;
+    }
+
+    public clear() {
+        this._size = 0;
     }
 }
