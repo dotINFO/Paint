@@ -2,7 +2,6 @@ import { Canvas, ITool, Point, Color } from '../drawing';
 import * as _ from 'lodash';
 
 var LEFT = 0, RIGHT = 1, TOP = 2, BOTTOM = 3;
-var tol = 80; // TODO: better place
 
 export class Filler extends ITool {
     private imageData: ImageData;
@@ -22,6 +21,7 @@ export class Filler extends ITool {
         fillTolerance: 0,
         fillHack: true
     };
+    private tol = 0.5 * 255; // TODO
 
 
     constructor(canvas: Canvas, options?) {
@@ -119,27 +119,20 @@ export class Filler extends ITool {
         this.imageData = null;
     }
 
-    /* Returns color difference in percentage */
-    private colorDifference(c1, c2) {
-        const perc1 = 100/c1*255;
-        const perc2 = 100/c2*255;
-        return Math.abs(perc1 - perc2);
+    // TODO: refactor
+    private similarPixels(r : number, g : number, b : number) {
+        return (Math.abs(r - this.startColor.R) +
+                Math.abs(g - this.startColor.G) +
+                Math.abs(b - this.startColor.B))
+                    / 3 <= this.tol;
     }
 
-    /* TODO: changed */
     private matchStartColor(pixelPos) {
         var r = this.imageData.data[pixelPos];
         var g = this.imageData.data[pixelPos + 1];
         var b = this.imageData.data[pixelPos + 2];
-        const r2 = this.startColor.R;
-        const g2 = this.startColor.G;
-        const b2 = this.startColor.B;
 
-        const difference = this.colorDifference(r, r2) + this.colorDifference(g, g2) + this.colorDifference(b, b2);
-
-        console.log(r, r2, g, g2, b, b2, difference, tol);
-
-        if (difference < tol) {
+        if (this.similarPixels(r, g, b))  {
             return true;
         }
 
