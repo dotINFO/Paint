@@ -29,16 +29,19 @@ export class RectangleTool extends IDrawingTool {
     }
 
     private drawRectangle(context: CanvasRenderingContext2D, endingPoint: Point) {
-        let startX = this._startingPoint.X + 0.5,
-            startY = this._startingPoint.Y + 0.5,
-            width = endingPoint.X - startX + 0.5,
-            height = endingPoint.Y - startY + 0.5;
+        let startX = this._startingPoint.X,
+            startY = this._startingPoint.Y,
+            width = endingPoint.X - startX,
+            height = endingPoint.Y - startY;
 
         context.lineWidth = this.canvas.drawingToolSize;
         context.strokeStyle = this.canvas.drawingToolColor.HexString;
+        context.save();
+        context.translate(0.5, 0.5);
         context.beginPath();
         context.rect(startX, startY, width, height);
         context.closePath();
         context.stroke();
+        context.restore();
     }
 }
